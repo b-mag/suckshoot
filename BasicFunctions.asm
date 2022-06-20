@@ -43,7 +43,7 @@ CLDIR0:
 		lda #0	
 CLDIR:	;Clear LDIR
 		ldy z_hl
-		sta ,y
+		STA ,y
 		
 		leay 1,y		;INCY
 		sty z_de
@@ -54,8 +54,8 @@ LDIR:
 		ldx z_hl
 		ldy z_de
 LDIR2:			
-        lda ,X+
-        sta ,Y+
+        LDA ,X+;lda ,X+
+        STA ,Y+;sta ,Y+
 		leau -1,u		;Dec U
 		BNE LDIR2
 		rts

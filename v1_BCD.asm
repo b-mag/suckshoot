@@ -3,7 +3,7 @@
 BCD_Show:	
 	leax b,x	;X=X+B - Move to Most significant byte
 BCD_ShowDirect:
-    LDA ,-x	;lda -x
+    LDA ,-X;LDA -x	;lda -x
 	pshs x,b
 		jsr PrintBCDChar		
 	puls x,b
@@ -26,10 +26,10 @@ PrintBCDCharOne:
 BCD_Add:
 	andcc #%11111110		;Clear Carry
 BCD_Add_Again:
-	lda ,y			;Get BCD byte
+	LDA ,Y;lda y			;Get BCD byte
 	adca ,x+		;Add BCD param + Carry
 	daa				;Decimal Adjust Accumulator
-	sta ,y+			;Store BCD byte
+	STA ,y+			;Store BCD byte
 	decb
 	bne BCD_Add_Again ;Repeat for next byte
 	rts
@@ -40,8 +40,8 @@ BCD_Cp:
 	leax b,x	;X=X+B - Move to Most significant byte
 	leay b,y	;Y=Y+B - Move to Most significant byte
 BCD_CpB:	
-		lda ,-x
-		cmpa ,-y
+		LDA ,-X;lda -x
+		cmpa ,-Y
 		bne BCD_CpDone		;If this byte is the same, 
 		decb					;we need to check the next
 		bne BCD_CpB

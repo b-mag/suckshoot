@@ -48,7 +48,7 @@ DoRandomByte2:
 	andb #%00001111		;Convert 2nd seed low nibble to Lookup
 		
 	abx
-	lda ,x					;Get Byte from LUT 1
+	LDA ,X;lda ,x					;Get Byte from LUT 1
 	sta z_d
 		
 	jsr DoRandomByte1
@@ -57,7 +57,7 @@ DoRandomByte2:
 	
 	ldx #Randoms2
 	abx  
-	lda ,x					;Get Byte from LUT2
+	LDA ,X;lda ,x					;Get Byte from LUT2
 	
 	eora z_d				;Xor 1st lookup
 	rts

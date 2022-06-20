@@ -1,50 +1,84 @@
 	include "BasicMacros.asm"	
 	
+     BSS
+     ORG $c880       ; well start of our ram space
 
-;	ASSUME dpr:$C8		;SETDP on other systems $D0= Hardware Regs $C8=Ram
-		
-UserRam Equ $C900	;Ram starts C800
+;txtScoreRam DS 100
+
+
+     ;ORG $c980
+      ORG $c900
+
+EnemySprite DS 1
+EnemyScale DS 1
+EnemySpeed DS 1
+EnemySpeedb DS 9
+SoundTimeOut  DS 7
+EnemyX DS 2
+EnemyY DS 2;
+
+PlayerX DS 2
+PlayerY DS 2
+
+
+BcdHiscore DS 5
+BcdScore DS 5
+BcdLives DS 1
+
+
+
 z_Regs equ $C0
-;***************************************************************************
-                    INCLUDE  "VECTREX.I"                    ; vectrex function includes
-;***************************************************************************
+
+
+
 ; The cartridge ROM starts at address 0
-                    CODE     
-                    ORG      0 
-                    DB       "g GCE 2018", $80 ; 'g' is copyright sign
-                    DW       music1                       ; music from the rom 
-                    DB       $F8, $50, $20, -$80          ; hight, width, rel y, rel x (from 0,0) 
-explosion_string
-                    DB       "LEARNASM.NET", $80            ; some game information, ending with $80
-                    DB       0                            ; end of game header 
+
+     CODE     
+     ORG  0 
+                DB      "g GCE 2022", $80       ; 'g' is copyright sign
+                DW      $FD0D                   ; music from the rom
+                DB      $F8, $50, $20, -$55     ; height, width, rel y, rel x
+                                                ; (from 0,0)
+                DB      "VEC WAR",$80     ; some game information,
+                                                ; ending with $80
+                 DB      0                       ; end of game header                     ; end of game header 
 	
-;	ASSUME dpr:$C8		;SETDP on other systems $D0= Hardware Regs $C8=Ram
+; Switch Direct Page	
 	lda #$C8
 	tfr a,dp
 	jsr ScreenInit
 	
-	
-EnemySprite equ $C980	
-EnemyScale equ $C981
-EnemySpeed equ $C982
-EnemySpeedb equ $C983
-SoundTimeOut  equ $C98C
-EnemyX equ $C984
-EnemyY equ $C986
 
-PlayerX equ $C988
-PlayerY equ $C98A
+;z_Regs equ $C0
+;EnemySprite equ $C980	
+;EnemyScale equ $C981
+;EnemySpeed equ $C982
+;EnemySpeedb equ $C983
+;SoundTimeOut  equ $C98C
+;EnemyX equ $C984
+;EnemyY equ $C986
+
+;PlayerX equ $C988
+;PlayerY equ $C98A
 
 
-BcdHiscore equ $C990
-BcdScore equ $C995
-BcdLives equ $C994
-txtScoreRam equ $C880
+;BcdHiscore equ $C990
+;BcdScore equ $C995
+;BcdLives equ $C994
+;txtScoreRam equ $C880 
+
+
+;vars
+txtScoreRam DS 100
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	
 	
 	
 	;ASSUME dpr:$C8		;SETDP on other systems $D0= Hardware Regs $C8=Ram
+	lda #$C8
+	tfr a,dp
 	
 	ldd #$FC38	;Font Size ($HHWW=$F848 / $FC38)
 	std $C82A	;SIZRAS (2 bytes) - Size of Raster Text
@@ -73,6 +107,7 @@ ShowTitle:
 
 ;Update the highscore
 	ldu #txtScoreRam+(txtHiscoreB-txtHiscore)
+     ;ldu #txtScoreRam
 	ldb #4
 	ldx #BcdHiscore
 	jsr BCD_Show	
