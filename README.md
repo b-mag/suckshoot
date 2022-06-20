@@ -8,8 +8,11 @@ Initial commit is what was provided on chibiakuma plus some modifications to bui
 
 Game plays in VIDE but has a few bugs.  Feel free to contribute bug fixes or add functionality.
 
+Keith discussing the games code: https://www.youtube.com/watch?v=uhiQyI0RLjw&t=432s
+
 Thank you Keith for the 6809 lessons... check out Keith's book: https://www.amazon.com/Learn-Multiplatform-Assembly-Programming-ChibiAkumas/dp/B09VWHYDKJ/
 
 
 Thank you Malban for all the great Vectrex resources!
 
+![suckshoot](https://user-images.githubusercontent.com/15198259/174113446-3cc8a004-ade4-496d-af25-22dbd4598640.png)
