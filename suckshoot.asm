@@ -1,14 +1,12 @@
 	include "BasicMacros.asm"	
+     include "VECTREX.I"
 	
      BSS
-     ORG $c880       ; well start of our ram space
-
-;txtScoreRam DS 100
+     ORG $c880
 
 
-     ;ORG $c980
-      ORG $c900
-
+;variables other than txt ram work great here...
+txtScoreRam DS 100
 EnemySprite DS 1
 EnemyScale DS 1
 EnemySpeed DS 1
@@ -25,8 +23,6 @@ BcdHiscore DS 5
 BcdScore DS 5
 BcdLives DS 1
 
-
-
 z_Regs equ $C0
 
 
@@ -39,7 +35,7 @@ z_Regs equ $C0
                 DW      $FD0D                   ; music from the rom
                 DB      $F8, $50, $20, -$55     ; height, width, rel y, rel x
                                                 ; (from 0,0)
-                DB      "VEC WAR",$80     ; some game information,
+                DB      "P2 PINEAPPLE WARS",$80     ; some game information,
                                                 ; ending with $80
                  DB      0                       ; end of game header                     ; end of game header 
 	
@@ -48,29 +44,6 @@ z_Regs equ $C0
 	tfr a,dp
 	jsr ScreenInit
 	
-
-;z_Regs equ $C0
-;EnemySprite equ $C980	
-;EnemyScale equ $C981
-;EnemySpeed equ $C982
-;EnemySpeedb equ $C983
-;SoundTimeOut  equ $C98C
-;EnemyX equ $C984
-;EnemyY equ $C986
-
-;PlayerX equ $C988
-;PlayerY equ $C98A
-
-
-;BcdHiscore equ $C990
-;BcdScore equ $C995
-;BcdLives equ $C994
-;txtScoreRam equ $C880 
-
-
-;vars
-txtScoreRam DS 100
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	
@@ -412,87 +385,7 @@ PrintChar:
 bcdScoreAdd:	;5 points in BCD
 	DB $05,$00,$00,$00
 	
-PacketBat1:			;Bat Frame 1
-		;CMD,YYY,XXX
-    DB $00,$1C,$00
-    DB $FF,$F7,$ED
-    DB $FF,$E3,$00
-    DB $FF,$01,$00
-    DB $FF,$F5,$1C
-    DB $FF,$15,$16
-    DB $FF,$1C,$F1
-    DB $FF,$00,$F2
-    DB $00,$F6,$14
-    DB $00,$01,$00
-    DB $FF,$13,$11
-    DB $FF,$F5,$0A
-    DB $FF,$06,$0B
-    DB $FF,$E1,$02
-    DB $FF,$13,$E9
-    DB $FF,$F9,$F1
-    DB $00,$00,$D4
-    DB $FF,$10,$EE
-    DB $FF,$F3,$F7
-    DB $FF,$08,$F5
-    DB $FF,$E0,$FC
-    DB $FF,$0E,$16
-    DB $FF,$00,$14
-    DB $00,$0A,$0F
-    DB $FF,$FB,$FB
-    DB $FF,$FD,$02
-    DB $FF,$00,$01
-    DB $FF,$05,$06
-    DB $FF,$03,$FB
-    DB $00,$02,$0C
-    DB $00,$FF,$00
-    DB $00,$00,$01
-    DB $FF,$00,$07
-    DB $FF,$FB,$05
-    DB $FF,$FE,$F8
-    DB $FF,$07,$FB
-    DB $00,$EF,$F2
-    DB $00,$FC,$FE
-    DB $00,$00,$01
-    DB $FF,$06,$21
-    DB $01
-	
-PacketBat2:			;Bat Frame 2	
-    DB $00,$1C,$00
-    DB $FF,$F7,$ED
-    DB $FF,$E3,$00
-    DB $FF,$01,$00
-    DB $FF,$F5,$1C
-    DB $FF,$15,$16
-    DB $FF,$1C,$F1
-    DB $FF,$00,$F2
-    DB $00,$F6,$14
-    DB $00,$01,$00
-    DB $00,$F1,$DB
-    DB $FF,$04,$25
-    DB $FF,$EB,$F3
-    DB $FF,$12,$E8
-    DB $00,$07,$04
-    DB $FF,$07,$05
-    DB $FF,$FC,$07
-    DB $00,$00,$07
-    DB $FF,$06,$04
-    DB $FF,$FC,$06
-    DB $00,$05,$02
-    DB $FF,$00,$13
-    DB $FF,$E9,$08
-    DB $FF,$06,$0F
-    DB $FF,$D6,$F8
-    DB $FF,$2D,$F0
-    DB $FF,$0B,$ED
-    DB $00,$F8,$D9
-    DB $FF,$08,$F0
-    DB $FF,$E4,$F9
-    DB $FF,$0C,$ED
-    DB $FF,$CF,$0E
-    DB $FF,$30,$0E
-    DB $FF,$09,$0E
-Packet:
-    DB $01
+
 	
 	
 PacketTarget:			;Crosshair
@@ -561,13 +454,13 @@ ShowSprite:		;Draw our bat at (X,Y)
 		jsr $F312 	;POSITN - Set beam pos to (Y,X) A,B
 	
 		ldb EnemyScale		;Size
-		LDX #PacketBat1     ;Packet address
+		LDX #v_PacketBat1     ;Packet address
 		
 		inc EnemySprite
 		lda EnemySprite
 		anda #%00010000
 		beq Frame1
-			LDX #PacketBat2     ;Packet address
+			LDX #v_PacketBat2     ;Packet address
 Frame1:		
 		jsr $F40E 	;Tpack - Draw according to ‘Packet’ style list
 
@@ -733,5 +626,5 @@ rangetestoutofrange:
 	include "V1_Random.asm"
 	include "BasicFunctions.asm"
 	include "AY_V1_ChibiSound.asm"
-	
+	include "character_data.asm"
 	include "v1_BCD.asm"
